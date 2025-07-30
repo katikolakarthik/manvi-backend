@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 app.set('trust proxy', 1);
 // ✅ Direct MongoDB connection (used inline here)
 mongoose
-  .connect("mongodb+srv://tkrcet:abc1234@cluster0.y4apc.mongodb.net/tkrcet")
+  .connect("mongodb+srv://bunny:bunny123@cluster0.prok7pl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => console.log("MongoDB connected successfully"))
   .catch((error) => console.error("MongoDB connection failed:", error.message));
 
