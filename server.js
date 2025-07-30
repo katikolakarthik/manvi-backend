@@ -22,6 +22,8 @@ const orderRoutes = require('./routes/orders');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// ✅ Add this line to trust the proxy (needed for express-rate-limit with Vercel or any proxy)
+app.set('trust proxy', 1);
 // ✅ Direct MongoDB connection (used inline here)
 mongoose
   .connect("mongodb+srv://tkrcet:abc1234@cluster0.y4apc.mongodb.net/tkrcet")
