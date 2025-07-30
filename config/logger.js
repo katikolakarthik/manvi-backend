@@ -1,10 +1,16 @@
 const winston = require('winston');
+const fs = require('fs');
+const path = require('path');
+
+// Ensure logs directory exists
+const logDir = path.join(__dirname, '..', 'logs');
+if (!fs.existsSync(logDir)) {
+  fs.mkdirSync(logDir, { recursive: true });
+}
 
 // Define log format
 const logFormat = winston.format.combine(
-  winston.format.timestamp({
-    format: 'YYYY-MM-DD HH:mm:ss'
-  }),
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
   winston.format.json()
 );
@@ -15,24 +21,21 @@ const logger = winston.createLogger({
   format: logFormat,
   defaultMeta: { service: 'manvi-backend' },
   transports: [
-    // Write all logs with importance level of `error` or less to `error.log`
     new winston.transports.File({ 
-      filename: 'logs/error.log', 
+      filename: path.join(logDir, 'error.log'), 
       level: 'error',
-      maxsize: 5242880, // 5MB
+      maxsize: 5242880,
       maxFiles: 5,
     }),
-    // Write all logs with importance level of `info` or less to `combined.log`
     new winston.transports.File({ 
-      filename: 'logs/combined.log',
-      maxsize: 5242880, // 5MB
+      filename: path.join(logDir, 'combined.log'),
+      maxsize: 5242880,
       maxFiles: 5,
     }),
   ],
 });
 
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
+// Log to console during development
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
     format: winston.format.combine(
@@ -42,4 +45,4 @@ if (process.env.NODE_ENV !== 'production') {
   }));
 }
 
-module.exports = logger; 
+module.exports = logger;
